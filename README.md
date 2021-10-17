@@ -1,0 +1,2 @@
+# pyqtt
+PySide
