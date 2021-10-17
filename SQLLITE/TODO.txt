@@ -1,0 +1,8 @@
+Date
+add
+edit
+attendance
+
+get sort/filter model ready
+use generate model chk if date exists
+if delete delete from db
