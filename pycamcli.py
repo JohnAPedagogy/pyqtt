@@ -1,21 +1,14 @@
-# import sys
-# from PyQt4.QtGui import QApplication, QPushButton
-# app=QApplication(sys.argv)
-# button=QMessageBox.warning (QWidget, "Exit?", "Exit", QMessageBox.Ok, StandardButton defaultButton = QMessageBox.NoButton)
-# if button==
-# button.show()
-# sys.exit(app.exec_())
 
 import cv2
 import aiohttp
-import asyncio
-import cv2, base64
+import asyncio, sys
+import cv2, base64, getopt
 import numpy as np
 
-async def main():
+async def get_data(arg='localhost'):
     while True:
         async with aiohttp.ClientSession() as session:
-            async with session.get('http://localhost:8080/') as resp:
+            async with session.get(f'http://{arg}:8080/') as resp:
                 jpg_original = base64.b64decode(await resp.read())
                 nparr = np.frombuffer(jpg_original, np.uint8)
                 img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -23,6 +16,26 @@ async def main():
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+def main(argv):
+   inputfile = ''
+   outputfile = ''
+   # try:
+   #    opts, args = getopt.getopt(argv) #,"hi:o:",["ifile=","ofile="])
+   # except getopt.GetoptError:
+   #    print( 'arg error') #'test.py -i <inputfile> -o <outputfile>'
+      # sys.exit(2)
+   # for opt, arg in opts:
+   #    if opt == '-h':
+   #       print 'test.py -i <inputfile> -o <outputfile>'
+   #       sys.exit()
+   #    elif opt in ("-i", "--ifile"):
+   #       inputfile = arg
+   #    elif opt in ("-o", "--ofile"):
+   #       outputfile = arg
+   loop = asyncio.get_event_loop()
+   loop.run_until_complete(get_data(argv[0]))
+
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
 
