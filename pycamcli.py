@@ -33,9 +33,12 @@ def main(argv):
    #    elif opt in ("-o", "--ofile"):
    #       outputfile = arg
    loop = asyncio.get_event_loop()
-   loop.run_until_complete(get_data(argv[0]))
+   loop.run_until_complete(get_data(argv))
 
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+   if len(sys.argv) > 1:
+       main(sys.argv[1:])
+   else:
+       main('localhost')
 
