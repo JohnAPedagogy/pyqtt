@@ -9,7 +9,8 @@ async def get_data(arg='localhost'):
     while True:
         async with aiohttp.ClientSession(trust_env=True) as session:
             async with session.get(f'http://{arg}:8080/') as resp:
-                jpg_original = base64.b64decode(await resp.read())
+                fromsrv =await resp.read()
+                jpg_original = base64.b64decode(fromsrv)
                 if jpg_original==None:
                     print("Nothing from server. Has the service been started?")
                     break
