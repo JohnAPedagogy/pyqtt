@@ -6,7 +6,6 @@ import cv2, base64, getopt
 import numpy as np
 
 async def get_data(arg='localhost'):
-    print(arg)
     while True:
         async with aiohttp.ClientSession(trust_env=True) as session:
             async with session.get(f'http://{arg}:8080/') as resp:
@@ -17,7 +16,6 @@ async def get_data(arg='localhost'):
                 nparr = np.frombuffer(jpg_original, np.uint8)
                 print(nparr.size)
                 img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-                print(img_np.shape)
                 cv2.imshow('Output', img_np)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
