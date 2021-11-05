@@ -6,8 +6,9 @@ import cv2, base64, getopt
 import numpy as np
 
 async def get_data(arg='localhost'):
+    print(arg)
     while True:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(trust_env=True) as session:
             async with session.get(f'http://{arg}:8080/') as resp:
                 jpg_original = base64.b64decode(await resp.read())
                 nparr = np.frombuffer(jpg_original, np.uint8)
@@ -38,7 +39,7 @@ def main(argv):
 
 if __name__ == "__main__":
    if len(sys.argv) > 1:
-       main(sys.argv[1:])
+       main(sys.argv[1])
    else:
        main('localhost')
 
