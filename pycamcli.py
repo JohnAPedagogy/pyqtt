@@ -15,7 +15,9 @@ async def get_data(arg='localhost'):
                     print("Nothing from server. Has the service been started?")
                     break
                 nparr = np.frombuffer(jpg_original, np.uint8)
-                print(nparr.size)
+                if (nparr.size<50000):
+                    print("Format Error: Could a proxy have blocked me?")
+                    break
                 img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
                 cv2.imshow('Output', img_np)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
