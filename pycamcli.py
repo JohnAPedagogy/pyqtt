@@ -15,9 +15,9 @@ async def get_data(arg='localhost'):
                     print("Nothing from server. Has the service been started?")
                     break
                 nparr = np.frombuffer(jpg_original, np.uint8)
-                print(nparr)
+                print(nparr.size)
                 img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-                print(img_np)
+                print(img_np.shape)
                 cv2.imshow('Output', img_np)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
