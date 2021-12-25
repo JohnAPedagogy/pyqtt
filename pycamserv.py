@@ -1,12 +1,11 @@
 
 
-import asyncio, aiohttp
+import aiohttp
 import cv2, base64
 from aiohttp import web
 import aiohttp_cors
 
 cap = cv2.VideoCapture(0)
-#loop = asyncio.get_event_loop()
 
 async def get_data(arg='john-research.ddns.net'):
     async with aiohttp.ClientSession(trust_env=True) as session:
@@ -17,7 +16,6 @@ async def get_data(arg='john-research.ddns.net'):
 async def capture(request):
     _, image = cap.read()
     if(not image):
-        #loop.run_until_complete(get_data())
         return await get_data()
     else:
         print('here1')
