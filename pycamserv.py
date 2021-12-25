@@ -12,7 +12,7 @@ import aiohttp_cors
 
 
 cap = cv2.VideoCapture(0)
-
+print(cap)
 async def hello(request):
     return web.Response(text="Hello, world")
 
