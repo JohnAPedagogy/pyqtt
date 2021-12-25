@@ -2,7 +2,7 @@
 import cv2
 import aiohttp
 import asyncio, sys
-import cv2, base64, getopt
+import cv2, base64
 import numpy as np
 
 async def get_data(arg='localhost'):

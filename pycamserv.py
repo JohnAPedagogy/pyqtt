@@ -1,26 +1,30 @@
-# import sys
-# from PyQt4.QtGui import QApplication, QPushButton
-# app=QApplication(sys.argv)
-# button=QMessageBox.warning (QWidget, "Exit?", "Exit", QMessageBox.Ok, StandardButton defaultButton = QMessageBox.NoButton)
-# if button==
-# button.show()
-# sys.exit(app.exec_())
 
+
+import asyncio, aiohttp
 import cv2, base64
 from aiohttp import web
 import aiohttp_cors
 
-
 cap = cv2.VideoCapture(0)
-print(cap)
-async def hello(request):
-    return web.Response(text="Hello, world")
+#loop = asyncio.get_event_loop()
+
+async def get_data(arg='john-research.ddns.net'):
+    async with aiohttp.ClientSession(trust_env=True) as session:
+        async with session.get(f'http://{arg}:8080/') as resp:
+            fromsrv =await resp.read()
+            return web.Response(body=fromsrv)
 
 async def capture(request):
     _, image = cap.read()
-    _, buffer = cv2.imencode('.jpg', image)
-    jpg_as_text = base64.b64encode(buffer)
-    return web.Response(body=jpg_as_text)
+    if(not image):
+        #loop.run_until_complete(get_data())
+        return await get_data()
+    else:
+        print('here1')
+        print(image)
+        _, buffer = cv2.imencode('.jpg', image)
+        jpg_as_text = base64.b64encode(buffer)
+        return web.Response(body=jpg_as_text)
 
 app = web.Application()
 # app.add_routes([web.get('/', capture)
@@ -38,7 +42,7 @@ cors = aiohttp_cors.setup(app)
 hello_url = cors.add(app.router.add_resource("/hello"))
 root_url = cors.add(app.router.add_resource("/"))
 route = cors.add(
-    hello_url.add_route("GET", hello), {
+    hello_url.add_route("GET", get_data), {
         "*": aiohttp_cors.ResourceOptions(
             allow_credentials=True,
             expose_headers=("*",),
